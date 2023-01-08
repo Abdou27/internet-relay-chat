@@ -1,6 +1,5 @@
-import json
+import re
 import tkinter as tk
-import logging
 
 MAX_WIDTH = 800
 MAX_HEIGHT = 800
@@ -12,6 +11,7 @@ class ChatGUI(tk.Tk):
         super().__init__()
         self.title(title)
         self.socket = socket
+        self.protocol("WM_DELETE_WINDOW", self.close_connection)
         width = int(self.winfo_screenwidth() - 200)
         width = MAX_WIDTH if width > MAX_WIDTH else width
         height = int(self.winfo_screenheight() - 200)
@@ -20,11 +20,13 @@ class ChatGUI(tk.Tk):
         # Data
         self.text_content_array = []
         self.input_content = tk.StringVar()
-        # Init GUI
-        self.init_input_box()
-        self.init_text_box()
-
-    def init_text_box(self):
+        # Init Input Box
+        self.input_box = tk.Entry(self, textvariable=self.input_content)
+        self.input_box.bind("<Return>", self.submit_message)
+        self.input_box.pack(side=tk.BOTTOM, fill=tk.X, padx=5, pady=5)
+        self.input_box.focus_set()
+        self.bind("<1>", lambda x: self.input_box.focus_set())
+        # Init Text Box
         self.text_box_frame = tk.Frame(self)
         self.text_box_frame.pack(fill=tk.BOTH, expand=True)
         self.text_box_frame.pack_propagate(False)
@@ -34,13 +36,6 @@ class ChatGUI(tk.Tk):
         self.text_box['yscrollcommand'] = self.scrollbar.set
         self.scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
         self.text_box.pack(side=tk.BOTTOM, fill=tk.BOTH, expand=1)
-
-    def init_input_box(self):
-        self.input_box = tk.Entry(self, textvariable=self.input_content)
-        self.input_box.bind("<Return>", self.submit_message)
-        self.input_box.pack(side=tk.BOTTOM, fill=tk.X, padx=5, pady=5)
-        self.input_box.focus_set()
-        self.bind("<1>", lambda x: self.input_box.focus_set())
 
     def add_message(self, message):
         text_box_content = self.text_box.get("0.0", tk.END)
@@ -54,3 +49,9 @@ class ChatGUI(tk.Tk):
         self.input_content.set("")
         self.add_message("> " + input_content)
         self.socket.send(input_content.encode())
+        if re.match(r"^/exit\s", input_content):
+            self.destroy()
+
+    def close_connection(self):
+        self.socket.send("/exit".encode())
+        self.destroy()
