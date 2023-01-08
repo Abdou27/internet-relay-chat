@@ -88,7 +88,7 @@ def handle_conn(conn, addr):
                     key_msg = f" Clé : {key}" if key else ""
                     message = f"{name} vous a invité au canal {invite_channel}.{key_msg}"
                     conn.send(message.encode())
-                else:
+                elif msg_cmd:
                     for ind_addr, ind_conn in individual_conns.items():
                         if addr == ind_addr:
                             continue
