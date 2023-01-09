@@ -10,3 +10,16 @@ class NameAlreadyTaken(Exception):
 
     def get_client_message(self):
         return f"Le nom ({self.name}) est déjà pris, la connexion a été refusée."
+
+
+class UserExited(Exception):
+    def __init__(self, name):
+        self.name = name
+        super(UserExited, self).__init__()
+
+    def get_server_message(self):
+        return f"\r{self.name} a fermé la connexion."
+
+
+
+

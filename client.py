@@ -7,6 +7,8 @@ import time
 from ChatGUI import ChatGUI
 import sys
 
+from exceptions import NameAlreadyTaken
+
 nickname = sys.argv[1]
 servername = sys.argv[2]
 
@@ -22,13 +24,17 @@ def handle_conn(window):
             data = window.socket.recv(MAX_RECV_SIZE).decode()
             data = json.loads(data)
             if data["type"] == "NameAlreadyTaken":
-                print("Ce nom d'utilisateur est déjà pris.")
-                window.destroy()
+                name = data["type"]
+                addr = data["addr"]
+                raise NameAlreadyTaken(name, addr)
             elif data["type"] == "msg":
                 sender = data["sender"]
                 window.add_message(f"{sender} : {data}")
     except ConnectionResetError:
         print(f"Connexion perdue avec le serveur {servername}")
+    except NameAlreadyTaken as e:
+        print(e.get_client_message())
+    finally:
         window.destroy()
 
 
