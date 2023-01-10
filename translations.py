@@ -9,8 +9,8 @@ class Translations:
             "en": "The server is operational and listening !",
         },
         "user_absent": {
-            "fr": "Cet utilisateur est absent.",
-            "en": "This user is absent.",
+            "fr": "Je suis absent à ce moment, je vous réponderai après mon retour.",
+            "en": "I am absent at the moment. I will reply after I get back",
         },
         "user_does_not_exist": {
             "fr": "Cet utilisateur n'existe pas.",
@@ -31,6 +31,14 @@ class Translations:
         "server_has_been_stopped": {
             "fr": "Le serveur a été arrêté.",
             "en": "The server has been stopped.",
+        },
+        "invalid_command": {
+            "fr": "La commande que vous avez saisie n'est pas valide.",
+            "en": "The command you entered is invalid.",
+        },
+        "closing_connection_to_server": {
+            "fr": "Fermeture de la connexion au serveur.",
+            "en": "Closing connection to server.",
         },
         "help_msg": {
             "fr": """
@@ -94,6 +102,12 @@ class Translations:
         else:
             return f"The name \"{name}\" has already been taken, the connection has been refused."
 
+    def user_closed_connection(self, name: str) -> str:
+        if self.lang == "fr":
+            return f"\"{name}\" a fermé la connexion."
+        else:
+            return f"\"{name}\" has closed the connection."
+
     def connected_to(self, servername: str) -> str:
         if self.lang == "fr":
             return f"Connecté à \"{servername}\" !"
@@ -118,6 +132,12 @@ class Translations:
         else:
             return f"Connection lost with \"{identifier}\"."
 
+    def connection_lost_with_server(self, servername: str) -> str:
+        if self.lang == "fr":
+            return f"Connexion perdue avec le serveur \"{servername}\"."
+        else:
+            return f"Connection lost with the server \"{servername}\"."
+
     def away_cmd_response(self, away: bool, message: str) -> str:
         if self.lang == "fr":
             status = "absent" if away else "présent"
@@ -140,9 +160,6 @@ class Translations:
             key_msg = f" Key : \"{key}\"" if key else ""
             return f"\"{name}\" invited you to the channel \"{channel}\".{key_msg}"
 
-    def msg_cmd(self, name: str, message: str) -> str:
-        return f"\"{name}\" : \"{message}\""
-
     def list_cmd_response(self, channels: list) -> str:
         channels = list(map(lambda x: f"- {x}", channels))
         if self.lang == "fr":
@@ -158,3 +175,17 @@ class Translations:
         else:
             names.insert(0, f"List of users in the channel \"{channel}\" :")
         return "\n".join(names)
+
+    def join_cmd_response(self, channel: str, key: str, is_new: bool) -> str:
+        if self.lang == "fr":
+            if is_new:
+                key_msg = f" Clé : \"{key}\"" if key else ""
+                return f"Vous avez créé et rejoint avec succès le canal {channel}.{key_msg}"
+            else:
+                return f"Vous avez rejoint avec succès le canal {channel}."
+        else:
+            if is_new:
+                key_msg = f" Key : \"{key}\"" if key else ""
+                return f"You have successfully created and joined the channel {channel}."
+            else:
+                return f"You have successfully joined the channel {channel}."

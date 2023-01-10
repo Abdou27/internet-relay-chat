@@ -1,27 +1,23 @@
-import subprocess
 import threading
 import time
-
-
-def execute(cmd):
-    popen = subprocess.Popen(cmd, stdout=subprocess.PIPE, universal_newlines=True)
-    for stdout_line in iter(popen.stdout.readline, ""):
-        yield stdout_line
-    popen.stdout.close()
-    return_code = popen.wait()
-    if return_code:
-        raise subprocess.CalledProcessError(return_code, cmd)
+from Server import Server
+from Client import Client
 
 
 def server():
-    for line in execute(["python", "Server.py", "65432"]):
-        print(line, end="")
+    try:
+        s = Server(port=65432, lang="en", logging_level=1)
+        s.launch()
+    except Exception as e:
+        print(e)
 
 
 def client(name):
-    print("Here")
-    for line in execute(["python", "client.py", name, "65432"]):
-        print(line, end="")
+    try:
+        c = Client(nickname=name, server_name="65432", port=65432, lang="en", logging_level=1)
+        c.open_connection()
+    except Exception as e:
+        print(e)
 
 
 threading.Thread(target=server).start()

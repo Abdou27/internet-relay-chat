@@ -1,6 +1,3 @@
-from Translations import Translations
-
-
 class NameAlreadyTaken(Exception):
     def __init__(self, name, addr, translations):
         self.name = name
@@ -22,7 +19,7 @@ class UserExited(Exception):
         super().__init__()
 
     def get_server_message(self):
-        return f"\r{self.name} a fermé la connexion."
+        return self.T.user_closed_connection(self.name)
 
 
 
