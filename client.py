@@ -26,7 +26,7 @@ def handle_conn(window):
             if data["type"] == "NameAlreadyTaken":
                 name = data["type"]
                 addr = data["addr"]
-                raise NameAlreadyTaken(name, addr)
+                raise NameAlreadyTaken(name, addr, self.T)
             elif data["type"] == "msg":
                 sender = data["sender"]
                 window.add_message(f"{sender} : {data}")

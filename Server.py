@@ -50,7 +50,7 @@ class Server:
                 name = conn.recv(1024).decode()
                 with self.lock:
                     if name in self.users or name in self.channels:
-                        raise NameAlreadyTaken(name, addr)
+                        raise NameAlreadyTaken(name, addr, self.T)
                     self.users[name] = {
                         "addr": addr,
                         "conn": conn,
