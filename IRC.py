@@ -14,7 +14,7 @@ def execute(cmd):
 
 
 def server():
-    for line in execute(["python", "server.py", "65432"]):
+    for line in execute(["python", "Server.py", "65432"]):
         print(line, end="")
 
 

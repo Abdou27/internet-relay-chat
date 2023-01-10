@@ -1,21 +1,25 @@
+from Translations import Translations
+
+
 class NameAlreadyTaken(Exception):
-    def __init__(self, name, addr):
+    def __init__(self, name, addr, translations):
         self.name = name
         self.addr = addr
-        super(NameAlreadyTaken, self).__init__()
+        self.T = translations
+        super().__init__()
 
     def get_server_message(self):
-        return f"Un autre utilisateur ({self.name}) a essayé de se connecter avec le nom {self.addr}, la connexion a " \
-               f"été refusée."
+        return self.T.same_name_connection_refused(self.name, self.addr)
 
     def get_client_message(self):
-        return f"Le nom ({self.name}) est déjà pris, la connexion a été refusée."
+        return self.T.name_already_taken_connection_refused(self.name)
 
 
 class UserExited(Exception):
-    def __init__(self, name):
+    def __init__(self, name, translations):
         self.name = name
-        super(UserExited, self).__init__()
+        self.T = translations
+        super().__init__()
 
     def get_server_message(self):
         return f"\r{self.name} a fermé la connexion."
