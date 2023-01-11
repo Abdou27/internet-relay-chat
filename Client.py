@@ -103,10 +103,9 @@ class Client(tk.Tk):
             self.destroy()
 
     def add_message(self, message):
-        text_box_content = self.text_box.get("0.0", tk.END)
-        new_line = "\n" if text_box_content != "\n" else ""
-        added_line = new_line + message
-        self.text_box.insert(tk.END, added_line)
+        self.text_box["state"] = tk.NORMAL
+        self.text_box.insert(tk.END, message + "\n")
+        self.text_box["state"] = tk.DISABLED
         self.text_box.see(tk.END)
 
     def submit_message(self, _):
