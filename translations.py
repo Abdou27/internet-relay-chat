@@ -186,6 +186,6 @@ class Translations:
         else:
             if is_new:
                 key_msg = f" Key : \"{key}\"" if key else ""
-                return f"You have successfully created and joined the channel {channel}."
+                return f"You have successfully created and joined the channel {channel}.{key_msg}"
             else:
                 return f"You have successfully joined the channel {channel}."
