@@ -14,7 +14,7 @@ class Server:
         self.users = {}
         self.lock = threading.Lock()
         self.max_listens = options.get("max_listens", 1024)
-        self.max_recv_size = options.get("max_recv_size", 1024)
+        self.max_recv_size = options.get("max_recv_size", 1024**2)
         self.host = options.get("host", "127.0.0.1")
         self.port = options.get("port", 65432)
         self.server_name = options.get("server_name", str(self.port))
