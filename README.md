@@ -7,3 +7,10 @@ Les utilisateurs peuvent discuter en groupe à travers des canaux de discussion,
 Membres du groupe :
 - Abderrahim BENMELOUKA
 - Elon COHEN
+
+Comment lancer le server :
+``python Server.py 65432`` 
+
+Comment lancer le client :
+``python Client.py Rahim 65432``
+``python Client.py Elon 65432``
