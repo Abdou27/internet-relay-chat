@@ -10,7 +10,9 @@ from translations import Translations
 
 class Server:
     def __init__(self, **options):
-        self.channels = {}
+        self.channels = {
+            "default": {},
+        }
         self.users = {}
         self.lock = threading.Lock()
         self.max_listens = options.get("max_listens", 1024)
@@ -47,6 +49,7 @@ class Server:
 
     def handle_conn(self, conn, addr):
         name = None
+        delete_name = False
         try:
             self.send(conn, msg=self.T.connected_to(self.server_name))
             name = conn.recv(self.max_recv_size).decode()
@@ -60,6 +63,7 @@ class Server:
                     "away_msg": None,
                     "channel": None,
                 }
+                delete_name = True
             if self.logging_level >= 1:
                 print(self.T.user_connected_from(name, addr))
             while True:
@@ -82,7 +86,7 @@ class Server:
         finally:
             conn.close()
             with self.lock:
-                if name in self.users:
+                if delete_name and name in self.users:
                     del self.users[name]
 
     @staticmethod
